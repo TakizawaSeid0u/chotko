@@ -4,25 +4,25 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import OneHotEncoder
 
 data = pd.DataFrame({
-    "жанр": ["Приключения", "RPG", "Стратегия", "Симулятор", "Гонки", "Гонки", "Шутеры", "Файтинги", "Боевики"],
-    "время игры (ч)": [20, 70, 50, 5, 10, 15, 100, 15, 120],
+    "категория": ["одежда", "техника", "еда", "одежда", "техника", "еда", "одежда", "техника", "еда"],
+    "стоимость": [25, 70, 10, 30, 80, 5, 15, 105, 8],
     "оценки пользователей": [70, 35, 50, 90, 85, 80, 30, 75, 25],
     "Тип": ["казуальная", "хардкорная", "казуальная", "казуальная", "казуальная", "казуальная", "хардкорная", "казуальная", "хардкорная"]
 })
 
 encoder = OneHotEncoder()
-x_brand = encoder.fit_transform(data[["жанр"]]).toarray()
-x_price = data[["время игры (ч)", "оценки пользователей"]].values
+x_brand = encoder.fit_transform(data[["категория"]]).toarray()
+x_price = data[["стоимость"]].values
 x = np.hstack([x_brand, x_price])
 y = data["Тип"]
 
 clf = DecisionTreeClassifier()
 clf.fit(x, y)
 
-new_data = pd.DataFrame({"жанр": ["Шутеры"], "время игры (ч)": [80], "оценки пользователей": [30]})
-genre = encoder.transform(new_data[["жанр"]]).toarray()
-other = new_data[["время игры (ч)", "оценки пользователей"]].values
+new_data = pd.DataFrame({"категория": ["одежда"], "стоимость": [80], "оценки пользователей": [30]})
+genre = encoder.transform(new_data[["категория"]]).toarray()
+other = new_data[["стоимость", "оценки пользователей"]].values
 sample = np.hstack([genre, other])
 
 result = clf.predict(sample)[0]
-print(f"Жанр: {new_data['жанр'][0]} определен как {result}")
+print(f"категория: {new_data['категория'][0]} определен как {result}") #ffffffff
